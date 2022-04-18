@@ -3,29 +3,31 @@
 
 WarSide::WarSide(int shipscount, string color) : shipscount(shipscount), color(color)
 {
-	BomberFactory b_factory = BomberFactory(color, 100);
-	CruiserFactory c_factory = CruiserFactory(color, 100);
-	FighterFactory f_factory = FighterFactory(color, 100);
+	int diff_between_ships = 100;
+	BomberFactory b_factory = BomberFactory(color, diff_between_ships);
+	CruiserFactory c_factory = CruiserFactory(color, diff_between_ships);
+	FighterFactory f_factory = FighterFactory(color, diff_between_ships);
 
 	for (int i = 0; i < shipscount; i++)
 	{
 		int rand_num = (rand() % 3);
-		SpaceShip* ship;
 		if (rand_num == 0)
 		{
 			b_factory.update_ships_count(i);
-			ship = b_factory.create_ship();
+			BomberShip ship = b_factory.create_ship();
+			vships.push_back(&ship);
 		}
 		else if (rand_num == 1)
 		{
 			c_factory.update_ships_count(i);
-			ship = c_factory.create_ship();
+			CruiserShip ship = c_factory.create_ship();
+			vships.push_back(&ship);
 		}
 		else
 		{
 			f_factory.update_ships_count(i);
-			ship = f_factory.create_ship();
+			FighterShip ship = f_factory.create_ship();
+			vships.push_back(&ship);
 		}
-		vships.push_back(ship);
 	}
 }

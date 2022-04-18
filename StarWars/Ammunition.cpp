@@ -33,4 +33,5 @@ bool Ammunition::check_if_hit()
 
 bool Ammunition::check_if_hit_after_dodge()
 {
+	return true;
 }

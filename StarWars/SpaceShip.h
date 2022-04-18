@@ -24,7 +24,6 @@ private:
 	bool check_special_attack();
 	ShipCoordinates coordinates;
 	vector <Gun*> armory;
-	sf::Color sf_color;
 	bool fighting;
 protected:
 	int stamina;

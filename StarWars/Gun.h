@@ -16,10 +16,10 @@ private:
 	string type;
 	int period;
 	Coordinates coordinates;
-	int damage;
 protected:
 	int min_damage;
 	int fast;
+	int damage;
 public:
 	Gun();
 	Gun(string type, int period, int x, int y, int angle, int w, int h);

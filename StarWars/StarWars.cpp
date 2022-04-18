@@ -1,16 +1,14 @@
 ﻿#include <SFML/Graphics.hpp>
-#include "ships.h"
-#include "guns.h"
-#include "GameTurn.h"
+#include "WarSide.h"
 
 int main()
 {
-    //sf::RenderWindow okno(sf::VideoMode(800, 240), "Star Wars", sf::Style::Fullscreen);
     srand(time(NULL));
-    int i = 20;
-    Gun g = BomberGun("bomber", i, 10, 10, 10, 30, 10);
-    BomberShip bomber = BomberShip(100, 2, 0.2, 0.3, "bomber", "blue", i, 30, 30, 30, g);
-
+    int shipscount = 5;
+    WarSide blue_team = WarSide(shipscount, "blue");
+    WarSide red_team = WarSide(shipscount, "red");
+    sf::RenderWindow okno(sf::VideoMode(800, 240), "Star Wars", sf::Style::Fullscreen);
+    cout << blue_team.vships.size() << endl;
     while (okno.isOpen()) //główna pętla gry
     {
         sf::Event event;
@@ -23,8 +21,14 @@ int main()
                 okno.close(); //zakończ aplikację
         }
         okno.clear(sf::Color(0, 0, 0));
-        sf::CircleShape circle = bomber.draw();
-        okno.draw(circle);
+
+        //sf::CircleShape circle = blue_team.vships[1]->draw();
+        //okno.draw(circle);
+        /*for (auto i = blue_team.vships.begin(); i < blue_team.vships.end(); i++)
+        {
+            sf::CircleShape circle = (*i)->draw();
+            okno.draw(circle);
+        }*/
         //tu obsługa całej gry
         okno.display();
     }

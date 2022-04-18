@@ -9,10 +9,11 @@ class WarSide
 private:
 	typedef vector <SpaceShip*> VShips;
 	string color;
-	VShips vships;
 	int shipscount;
 public:
 	WarSide(int shipscount, string color);
+	~WarSide() {};
+	VShips vships;
 	void attack();
 	void defend();
 	bool end_round();

@@ -10,6 +10,7 @@ public:
 	{
 		min_damage = 30;
 		fast = 5;
+		damage = (rand() % 10) + min_damage;
 	}
 };
 class FighterGun :public Gun
@@ -20,6 +21,7 @@ public:
 	{
 		min_damage = 10;
 		fast = 1;
+		damage = (rand() % 10) + min_damage;
 	}
 };
 class CruiserGun :public Gun
@@ -30,6 +32,7 @@ public:
 	{
 		min_damage = 20;
 		fast = 2;
+		damage = (rand() % 10) + min_damage;
 	}
 };
 #endif

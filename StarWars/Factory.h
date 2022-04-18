@@ -13,8 +13,8 @@ protected:
 	int r, w, h, diff_between_ships, count, x, y, angle;
 public:
 	AbstractFactory(string color, int diff_between_ships);
-	virtual Gun * create_gun() = 0;
-	virtual SpaceShip * create_ship() = 0;
+	virtual Gun create_gun() = 0;
+	//virtual SpaceShip * create_ship() = 0;
 	void update_ships_count(int count);
 };
 
@@ -27,8 +27,8 @@ public:
 		w = 10;
 		h = 30;
 	}
-	Gun * create_gun() override;
-	SpaceShip * create_ship() override;
+	Gun create_gun() override;
+	BomberShip create_ship();
 };
 
 class FighterFactory:public AbstractFactory
@@ -40,8 +40,8 @@ public:
 		w = 5;
 		h = 12;
 	}
-	Gun * create_gun() override;
-	SpaceShip * create_ship() override;
+	Gun create_gun() override;
+	FighterShip create_ship();
 };
 
 class CruiserFactory:public AbstractFactory
@@ -53,7 +53,7 @@ public:
 		w = 10;
 		h = 20;
 	}
-	Gun * create_gun() override;
-	SpaceShip * create_ship() override;
+	Gun create_gun() override;
+	CruiserShip create_ship();
 };
 #endif

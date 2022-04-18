@@ -9,12 +9,12 @@ SpaceShip::SpaceShip(int life, int max_guns, float dodge_chances, float special_
 	coordinates(x, y, angle, r), life(life), max_guns(max_guns), dodge_chances(dodge_chances), special_attack_chances(special_attack_chances), type(type), color(color)
 {
 	take_gun(gun);
-	if (color == "red")
+	/*if (color == "red")
 		sf_color = sf::Color::Red;
 	else if (color == "blue")
 		sf_color = sf::Color::Blue;
 	else
-		cout << "Wrong color" << endl;
+		cout << "Wrong color" << endl;*/
 }
 
 void SpaceShip::take_gun(Gun *g)
@@ -77,8 +77,13 @@ void SpaceShip::destroy()
 
 sf::CircleShape SpaceShip::draw()
 {
+	cout << coordinates.x << endl;
+	cout << type << endl;
 	sf::CircleShape circle = sf::CircleShape(coordinates.r);
-	circle.setFillColor(sf_color);
+	if(color == "red")
+		circle.setFillColor(sf::Color::Red);
+	else
+		circle.setFillColor(sf::Color::Blue);
 	circle.setPosition(coordinates.x, coordinates.y);
 	return circle;
 }
