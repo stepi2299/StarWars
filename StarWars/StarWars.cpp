@@ -5,7 +5,7 @@
 
 int main()
 {
-    sf::RenderWindow okno(sf::VideoMode(800, 240), "Star Wars", sf::Style::Fullscreen);
+    //sf::RenderWindow okno(sf::VideoMode(800, 240), "Star Wars", sf::Style::Fullscreen);
     srand(time(NULL));
     int i = 20;
     Gun g = BomberGun("bomber", i, 10, 10, 10, 30, 10);

@@ -32,11 +32,11 @@ protected:
 
 public:
 	SpaceShip();
-	SpaceShip(int life, int max_guns, float dodge_chances, float special_attack_chances, string type, string color, int x, int y, int angle, int r, Gun &gun);
+	SpaceShip(int life, int max_guns, float dodge_chances, float special_attack_chances, string type, string color, int x, int y, int angle, int r, Gun *gun);
 	~SpaceShip() {}
-	void take_gun(Gun &g);
+	void take_gun(Gun *g);
 	void drop_the_gun();
-	bool can_take_gun(Gun &g);
+	bool can_take_gun(Gun *g);
 	void attack(SpaceShip* ship);
 	void dodge();
 	virtual void special_attack(SpaceShip* ship) = 0;

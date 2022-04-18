@@ -6,7 +6,9 @@ Gun::Gun()
 
 Gun::Gun(string type, int period, int x, int y, int angle, int w, int h):
 	type(type), period(period), coordinates(x, y, angle, w, h)
-{}
+{
+	damage = (rand() % 10) + min_damage;
+}
 
 string Gun::get_type()
 {

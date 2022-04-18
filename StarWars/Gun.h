@@ -16,8 +16,9 @@ private:
 	string type;
 	int period;
 	Coordinates coordinates;
-protected:
 	int damage;
+protected:
+	int min_damage;
 	int fast;
 public:
 	Gun();

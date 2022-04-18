@@ -5,7 +5,7 @@ SpaceShip::SpaceShip()
 	cout << "SpaceShip" << endl;
 }
 
-SpaceShip::SpaceShip(int life, int max_guns, float dodge_chances, float special_attack_chances, string type, string color, int x, int angle, int y, int r, Gun &gun):
+SpaceShip::SpaceShip(int life, int max_guns, float dodge_chances, float special_attack_chances, string type, string color, int x, int angle, int y, int r, Gun *gun):
 	coordinates(x, y, angle, r), life(life), max_guns(max_guns), dodge_chances(dodge_chances), special_attack_chances(special_attack_chances), type(type), color(color)
 {
 	take_gun(gun);
@@ -17,21 +17,21 @@ SpaceShip::SpaceShip(int life, int max_guns, float dodge_chances, float special_
 		cout << "Wrong color" << endl;
 }
 
-void SpaceShip::take_gun(Gun &g)
+void SpaceShip::take_gun(Gun *g)
 {
 	bool permission = can_take_gun(g);
 	if (permission == 1)
 	{
-		armory.push_back(&g);
+		armory.push_back(g);
 	}
 	else
 		cout << "Can not take this gun" << endl;
 }
 
-bool SpaceShip::can_take_gun(Gun &gun)
+bool SpaceShip::can_take_gun(Gun *gun)
 {
 	int current_armory_state = armory.size();
-	if ((current_armory_state < max_guns) && type==gun.get_type())
+	if ((current_armory_state < max_guns) && type==gun->get_type())
 		return true;
 	else
 		return false;
