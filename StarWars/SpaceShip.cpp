@@ -16,6 +16,7 @@ SpaceShip::SpaceShip(int life, int max_guns, float dodge_chances, float special_
 		sf_color = sf::Color::Blue;
 	else
 		cout << "Wrong color" << endl;
+	speed = 1;
 }
 
 void SpaceShip::take_gun(Gun *g)
@@ -102,4 +103,99 @@ float SpaceShip::get_distance_between_ships(SpaceShip* ship)
 {
 	ShipCoordinates target_coord = ship->get_coordinates();
 	return sqrt(pow(target_coord.x - coordinates.x, 2) + pow(target_coord.y - coordinates.y, 2));
+}
+
+void SpaceShip::move(int target_x, int target_y)
+{
+	if (coordinates.x == target_x)
+	{
+		moveX = 0;
+		if (coordinates.y < target_y)
+			moveY = speed;
+		else if (coordinates.y > target_y)
+			moveY = -speed;
+		else
+			moveY = 0;
+	}
+	else
+	{
+		moveY = 0;
+		if (coordinates.x < target_x)
+			moveX = speed;
+		else if (coordinates.x > target_x)
+			moveX = -speed;
+		else
+			moveX = 0;
+	}
+	rotate();
+}
+
+void SpaceShip::rotate()
+{
+	if (moveY > 0)
+	{
+		if (coordinates.angle > 0)
+		{
+			ang = -speed;
+			moveY = 0;
+		}
+		else if (coordinates.angle < 0)
+		{
+			ang = speed;
+			moveY = 0;
+		}
+	}
+	else if (moveY < 0)
+	{
+		if (coordinates.angle > 180)
+		{
+			ang = -speed;
+			moveY = 0;
+		}
+		else if (coordinates.angle < 180)
+		{
+			ang = speed;
+			moveY = 0;
+		}
+	}
+	else if (moveX > 0)
+	{
+		if (coordinates.angle > 270)
+		{
+			ang = -speed;
+			moveX = 0;
+		}
+		else if (coordinates.angle < 270)
+		{
+			ang = speed;
+			moveX = 0;
+		}
+	}
+	else if (moveX < 0)
+	{
+		if (coordinates.angle > 90)
+		{
+			ang = -speed;
+			moveX = 0;
+		}
+		else if (coordinates.angle < 90)
+		{
+			ang = speed;
+			moveX = 0;
+		}
+	}
+}
+
+void SpaceShip::update_position()
+{
+	coordinates.x += moveX;
+	coordinates.y += moveY;
+	coordinates.angle += ang;
+
+	for (auto i = armory.begin(); i < armory.end(); i++)
+		(*i)->update_coord_gun(moveX, moveY, ang);
+
+	moveX = 0;
+	moveY = 0;
+	ang = 0;
 }

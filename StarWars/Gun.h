@@ -30,6 +30,7 @@ public:
 	void move(int x, int y);
 	string get_type();
 	Coordinates get_coordinates();
+	void update_coord_gun(int x, int y, int ang);
 	~Gun() {}
 	sf::RectangleShape draw();
 };

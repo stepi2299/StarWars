@@ -17,7 +17,7 @@ class Gun;
 class SpaceShip
 {
 private:
-	int life, max_guns;
+	int life, max_guns, moveX = 0, moveY = 0, ang = 0;
 	float dodge_chances, special_attack_chances;
 	string type, color;
 	bool check_dodge();
@@ -25,6 +25,7 @@ private:
 	ShipCoordinates coordinates;
 	bool fighting;
 	sf::Color sf_color;
+	int speed;
 protected:
 	int stamina;
 	friend class Fight;
@@ -42,6 +43,8 @@ public:
 	virtual void special_attack(SpaceShip* ship) = 0;
 	ShipCoordinates get_coordinates();
 	void move(int x, int y);
+	void update_position();
+	void rotate();
 	SpaceShip find_oponent();  // rethink about if none is found
 	int get_current_life();
 	void subtract_life(int damage);

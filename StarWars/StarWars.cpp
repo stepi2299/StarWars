@@ -5,6 +5,7 @@ int main()
 {
     srand(time(NULL));
     int shipscount = 8;
+    int freq_of_movement = 0;
     sf::RenderWindow okno(sf::VideoMode(800, 240), "Star Wars", sf::Style::Fullscreen);
     sf::Vector2i window_dims(okno.getSize().x, okno.getSize().y);
     WarSide blue_team = WarSide(shipscount, "blue", window_dims);
@@ -21,6 +22,17 @@ int main()
 
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) //wciśnięto klawisz ESC
                 okno.close(); //zakończ aplikację
+        }
+        tmp_fights = red_team.find_opponents(blue_team);
+        for (auto i = tmp_fights.begin(); i < tmp_fights.end(); i++)
+            vfights.push_back((*i));
+        if (freq_of_movement >= 50)
+        {
+            for (auto i = vfights.begin(); i < vfights.end(); i++)
+            {
+                (*i)->move_to_fighting_position();
+            }
+            freq_of_movement = 0;
         }
         okno.clear(sf::Color(0, 0, 0));
         for (auto i = blue_team.vships.begin(); i < blue_team.vships.end(); i++)
@@ -44,11 +56,8 @@ int main()
                 okno.draw(rec);
             }
         }
-        tmp_fights = red_team.find_opponents(blue_team);
-        for (auto i = tmp_fights.begin(); i < tmp_fights.end(); i++)
-            vfights.push_back((*i));
-        //tu obsługa całej gry
         okno.display();
+        freq_of_movement++;
     }
     return 0;
 }

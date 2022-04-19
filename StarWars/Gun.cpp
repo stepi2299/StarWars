@@ -39,3 +39,10 @@ sf::RectangleShape Gun::draw()
 	rec.setRotation((float)coordinates.angle);
 	return rec;
 }
+
+void Gun::update_coord_gun(int x, int y, int ang)
+{
+	coordinates.x += x;
+	coordinates.y += y;
+	coordinates.angle += ang;
+}
