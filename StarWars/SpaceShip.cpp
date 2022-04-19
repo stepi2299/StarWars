@@ -9,6 +9,7 @@ SpaceShip::SpaceShip(int life, int max_guns, float dodge_chances, float special_
 	coordinates(x, y, angle, r), life(life), max_guns(max_guns), dodge_chances(dodge_chances), special_attack_chances(special_attack_chances), type(type), color(color)
 {
 	take_gun(gun);
+	fighting = false;
 	if (color == "red")
 		sf_color = sf::Color::Red;
 	else if (color == "blue")
@@ -82,4 +83,23 @@ sf::CircleShape SpaceShip::draw()
 	circle.setFillColor(sf_color);
 	circle.setPosition(coordinates.x, coordinates.y);
 	return circle;
+}
+
+bool SpaceShip::get_fighting()
+{
+	return fighting;
+}
+
+void SpaceShip::set_fighting(bool fight)
+{
+	if (fight != fighting)
+		fighting = fight;
+	else
+		cout << "Ship is already in current state: fighting = " << fighting << endl;
+}
+
+float SpaceShip::get_distance_between_ships(SpaceShip* ship)
+{
+	ShipCoordinates target_coord = ship->get_coordinates();
+	return sqrt(pow(target_coord.x - coordinates.x, 2) + pow(target_coord.y - coordinates.y, 2));
 }

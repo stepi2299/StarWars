@@ -9,9 +9,11 @@ int main()
     sf::Vector2i window_dims(okno.getSize().x, okno.getSize().y);
     WarSide blue_team = WarSide(shipscount, "blue", window_dims);
     WarSide red_team = WarSide(shipscount, "red", window_dims);
+    vector <Fight*> vfights;
     while (okno.isOpen()) //główna pętla gry
     {
         sf::Event event;
+        vector <Fight*> tmp_fights;
         while (okno.pollEvent(event)) //pętla obsługująca zdarzenia (wynika z architektury biblioteki SFML)
         {
             if (event.type == sf::Event::Closed) //kliknięto przycisk zamknij okno
@@ -42,7 +44,9 @@ int main()
                 okno.draw(rec);
             }
         }
-
+        tmp_fights = red_team.find_opponents(blue_team);
+        for (auto i = tmp_fights.begin(); i < tmp_fights.end(); i++)
+            vfights.push_back((*i));
         //tu obsługa całej gry
         okno.display();
     }

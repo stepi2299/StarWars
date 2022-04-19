@@ -30,3 +30,46 @@ WarSide::WarSide(int shipscount, string color, sf::Vector2i win_dims) : shipscou
 		vships.push_back(ship);
 	}
 }
+
+vector <Fight*> WarSide::find_opponents(WarSide& other_side)
+{
+	bool tmp_fighting, opponent_fighting;
+	float distance;
+	vector <Fight*> vfights;
+	for (auto i = vships.begin(); i < vships.end(); i++)
+	{
+		float max_distance = 0;
+		tmp_fighting = (*i)->get_fighting();
+		SpaceShip* opponent= (*i); // only because it didn't want to compile, but always it should be overwrite by opponents ships if fight will be create
+		bool found = false;
+		if (tmp_fighting == 1)
+			continue;
+		else
+		{
+			for (auto j = other_side.vships.begin(); j < other_side.vships.end(); j++)
+			{
+				opponent_fighting = (*j)->get_fighting();
+				if (opponent_fighting == 1)
+					continue;
+				else
+				{
+					distance = (*i)->get_distance_between_ships(*j);
+					if (distance > max_distance)
+					{
+						found = true;
+						max_distance = distance;
+						opponent = *j;
+					}
+				}
+			}
+			if (found == 1)
+			{
+				(*i)->set_fighting(true); //redteam
+				opponent->set_fighting(true);  // blueteam
+				shared_ptr <Fight> fight(new Fight((*i), opponent));
+				vfights.push_back(fight.get());  // check if it is working
+			}
+		}
+	}
+	return vfights;
+}

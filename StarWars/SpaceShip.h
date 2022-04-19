@@ -47,6 +47,8 @@ public:
 	void subtract_life(int damage);
 	void destroy();
 	sf::CircleShape draw();
-
+	void set_fighting(bool fight);
+	bool get_fighting();
+	float get_distance_between_ships(SpaceShip* ship);
 };
 #endif

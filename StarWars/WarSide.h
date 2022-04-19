@@ -17,7 +17,7 @@ public:
 	void attack();
 	void defend();
 	bool end_round();
+	vector <Fight*> find_opponents(WarSide& other_side);
 	void prepare_for_next_round();
-	void initialize();
 };
 #endif
