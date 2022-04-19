@@ -4,11 +4,11 @@
 int main()
 {
     srand(time(NULL));
-    int shipscount = 5;
-    WarSide blue_team = WarSide(shipscount, "blue");
-    WarSide red_team = WarSide(shipscount, "red");
+    int shipscount = 8;
     sf::RenderWindow okno(sf::VideoMode(800, 240), "Star Wars", sf::Style::Fullscreen);
-    cout << blue_team.vships.size() << endl;
+    sf::Vector2i window_dims(okno.getSize().x, okno.getSize().y);
+    WarSide blue_team = WarSide(shipscount, "blue", window_dims);
+    WarSide red_team = WarSide(shipscount, "red", window_dims);
     while (okno.isOpen()) //główna pętla gry
     {
         sf::Event event;
@@ -21,14 +21,28 @@ int main()
                 okno.close(); //zakończ aplikację
         }
         okno.clear(sf::Color(0, 0, 0));
-
-        //sf::CircleShape circle = blue_team.vships[1]->draw();
-        //okno.draw(circle);
-        /*for (auto i = blue_team.vships.begin(); i < blue_team.vships.end(); i++)
+        for (auto i = blue_team.vships.begin(); i < blue_team.vships.end(); i++)
         {
             sf::CircleShape circle = (*i)->draw();
             okno.draw(circle);
-        }*/
+            for (auto j = (*i)->armory.begin(); j < (*i)->armory.end(); j++)
+            {
+                sf::RectangleShape rec = (*j)->draw();
+                okno.draw(rec);
+            }
+        }
+        for (auto i = red_team.vships.begin(); i < red_team.vships.end(); i++)
+        {
+
+            sf::CircleShape circle = (*i)->draw();
+            okno.draw(circle);
+            for (auto j = (*i)->armory.begin(); j < (*i)->armory.end(); j++)
+            {
+                sf::RectangleShape rec = (*j)->draw();
+                okno.draw(rec);
+            }
+        }
+
         //tu obsługa całej gry
         okno.display();
     }

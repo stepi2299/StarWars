@@ -23,8 +23,8 @@ private:
 	bool check_dodge();
 	bool check_special_attack();
 	ShipCoordinates coordinates;
-	vector <Gun*> armory;
 	bool fighting;
+	sf::Color sf_color;
 protected:
 	int stamina;
 	friend class Fight;
@@ -33,6 +33,7 @@ public:
 	SpaceShip();
 	SpaceShip(int life, int max_guns, float dodge_chances, float special_attack_chances, string type, string color, int x, int y, int angle, int r, Gun *gun);
 	~SpaceShip() {}
+	vector <Gun*> armory;
 	void take_gun(Gun *g);
 	void drop_the_gun();
 	bool can_take_gun(Gun *g);

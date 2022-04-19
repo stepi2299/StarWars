@@ -11,7 +11,7 @@ private:
 	string color;
 	int shipscount;
 public:
-	WarSide(int shipscount, string color);
+	WarSide(int shipscount, string color, sf::Vector2i win_dims);
 	~WarSide() {};
 	VShips vships;
 	void attack();

@@ -5,8 +5,8 @@
 class BomberGun :public Gun
 {
 public:
-	BomberGun(string type, int period, int x, int y, int angle, int w, int h) :
-		Gun(type, period, x, y, angle, w,  h)
+	BomberGun(string type, int period, int x, int y, int angle, int w, int h, string color, int r) :
+		Gun(type, period, x, y, angle, w,  h, color, r)
 	{
 		min_damage = 30;
 		fast = 5;
@@ -16,8 +16,8 @@ public:
 class FighterGun :public Gun
 {
 public:
-	FighterGun(string type, int period, int x, int y, int angle, int w, int h) :
-		Gun(type, period, x, y, angle, w, h)
+	FighterGun(string type, int period, int x, int y, int angle, int w, int h, string color, int r) :
+		Gun(type, period, x, y, angle, w, h, color, r)
 	{
 		min_damage = 10;
 		fast = 1;
@@ -27,8 +27,8 @@ public:
 class CruiserGun :public Gun
 {
 public:
-	CruiserGun(string type, int period, int x, int y, int angle, int w, int h) :
-		Gun(type, period, x, y, angle, w, h)
+	CruiserGun(string type, int period, int x, int y, int angle, int w, int h, string color, int r) :
+		Gun(type, period, x, y, angle, w, h, color, r)
 	{
 		min_damage = 20;
 		fast = 2;

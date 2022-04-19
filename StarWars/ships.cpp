@@ -1,9 +1,5 @@
 #include "ships.h"
 
-BomberShip::BomberShip() {}
-FighterShip::FighterShip() {}
-CruiserShip::CruiserShip() {}
-
 void  BomberShip::special_attack(SpaceShip* ship)
 {
 
