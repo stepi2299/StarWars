@@ -18,28 +18,29 @@ class SpaceShip
 {
 private:
 	int life, max_guns, moveX = 0, moveY = 0, ang = 0;
-	float dodge_chances, special_attack_chances;
+	int dodge_chances, special_attack_chances;
 	string type, color;
-	bool check_dodge();
 	bool check_special_attack();
+	bool is_dodge();
 	ShipCoordinates coordinates;
 	bool fighting;
 	sf::Color sf_color;
 	int speed;
+	bool is_avoiding, increase;
 protected:
 	int stamina;
 	friend class Fight;
 
 public:
 	SpaceShip();
-	SpaceShip(int life, int max_guns, float dodge_chances, float special_attack_chances, string type, string color, int x, int y, int angle, int r, Gun *gun);
+	SpaceShip(int life, int max_guns, int dodge_chances, int special_attack_chances, string type, string color, int x, int y, int angle, int r, Gun *gun);
 	~SpaceShip() {}
 	vector <Gun*> armory;
 	void take_gun(Gun *g);
 	void drop_the_gun();
 	bool can_take_gun(Gun *g);
 	void attack(SpaceShip* ship);
-	void dodge();
+	void dodge(int x);
 	virtual void special_attack(SpaceShip* ship) = 0;
 	ShipCoordinates get_coordinates();
 	void move(int x, int y);

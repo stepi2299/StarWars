@@ -4,7 +4,7 @@
 int main()
 {
     srand(time(NULL));
-    int shipscount = 8;
+    int shipscount = 1;
     int freq_of_movement = 0;
     sf::RenderWindow okno(sf::VideoMode(800, 240), "Star Wars", sf::Style::Fullscreen);
     sf::Vector2i window_dims(okno.getSize().x, okno.getSize().y);
@@ -30,13 +30,17 @@ int main()
         {
             for (auto i = vfights.begin(); i < vfights.end(); i++)
             {
-                (*i)->move_to_fighting_position();
+                if ((*i)->get_on_place() == 0)
+                    (*i)->move_to_fighting_position();
+                else
+                    (*i)->choosing_fighters();
             }
             freq_of_movement = 0;
         }
         okno.clear(sf::Color(0, 0, 0));
         for (auto i = blue_team.vships.begin(); i < blue_team.vships.end(); i++)
         {
+            (*i)->update_position();
             sf::CircleShape circle = (*i)->draw();
             okno.draw(circle);
             for (auto j = (*i)->armory.begin(); j < (*i)->armory.end(); j++)
@@ -47,7 +51,7 @@ int main()
         }
         for (auto i = red_team.vships.begin(); i < red_team.vships.end(); i++)
         {
-
+            (*i)->update_position();
             sf::CircleShape circle = (*i)->draw();
             okno.draw(circle);
             for (auto j = (*i)->armory.begin(); j < (*i)->armory.end(); j++)

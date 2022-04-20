@@ -5,7 +5,7 @@ SpaceShip::SpaceShip()
 	cout << "SpaceShip" << endl;
 }
 
-SpaceShip::SpaceShip(int life, int max_guns, float dodge_chances, float special_attack_chances, string type, string color, int x, int y, int angle, int r, Gun *gun):
+SpaceShip::SpaceShip(int life, int max_guns, int dodge_chances, int special_attack_chances, string type, string color, int x, int y, int angle, int r, Gun *gun):
 	coordinates(x, y, angle, r), life(life), max_guns(max_guns), dodge_chances(dodge_chances), special_attack_chances(special_attack_chances), type(type), color(color)
 {
 	take_gun(gun);
@@ -17,6 +17,7 @@ SpaceShip::SpaceShip(int life, int max_guns, float dodge_chances, float special_
 	else
 		cout << "Wrong color" << endl;
 	speed = 1;
+	is_avoiding = false;
 }
 
 void SpaceShip::take_gun(Gun *g)
@@ -49,9 +50,42 @@ void SpaceShip::attack(SpaceShip* ship)
 	//TODO
 }
 
-void SpaceShip::dodge()
+bool SpaceShip::is_dodge()
 {
+	int dodge_rand = rand() % 1000;
+	if (dodge_chances >= dodge_rand)
+		return true;
+	else
+		return false;
+}
 
+void SpaceShip::dodge(int target_x)
+{
+	if (is_avoiding == 0)
+	{
+		if (target_x == coordinates.x)
+			increase = true;
+		else
+			increase = false;
+	}
+	if (increase == 1)
+	{
+		if (coordinates.x == target_x + coordinates.r*2)
+			is_avoiding = false;
+		else
+		{
+			move(target_x + coordinates.r*2, coordinates.y);
+			is_avoiding = true;
+		}
+	}
+	else if (increase == 0)
+		if (coordinates.x == target_x)
+			is_avoiding = false;
+		else
+		{
+			move(target_x, coordinates.y);
+			is_avoiding = true;
+		}
 }
 
 ShipCoordinates SpaceShip::get_coordinates()
@@ -127,7 +161,6 @@ void SpaceShip::move(int target_x, int target_y)
 		else
 			moveX = 0;
 	}
-	rotate();
 }
 
 void SpaceShip::rotate()

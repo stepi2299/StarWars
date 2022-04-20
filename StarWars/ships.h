@@ -6,7 +6,7 @@ class BomberShip:public SpaceShip
 {
 public:
 	BomberShip();
-	BomberShip(int life, int max_guns, float dodge_chances, float special_attack_chances, string type, string color, int x, int y, int angle, int r, Gun* gun) :
+	BomberShip(int life, int max_guns, int dodge_chances, int special_attack_chances, string type, string color, int x, int y, int angle, int r, Gun* gun) :
 		SpaceShip(life, max_guns, dodge_chances, special_attack_chances, type, color, x, y, angle, r, gun) 
 	{
 		stamina = 100;
@@ -18,7 +18,7 @@ class FighterShip :public SpaceShip
 {
 public:
 	FighterShip();
-	FighterShip(int life, int max_guns, float dodge_chances, float special_attack_chances, string type, string color, int x, int y, int angle, int r, Gun* gun) :
+	FighterShip(int life, int max_guns, int dodge_chances, int special_attack_chances, string type, string color, int x, int y, int angle, int r, Gun* gun) :
 		SpaceShip(life, max_guns, dodge_chances, special_attack_chances, type, color, x, y, angle, r, gun) 
 	{
 		stamina = 300;
@@ -30,7 +30,7 @@ class CruiserShip :public SpaceShip
 {
 public:
 	CruiserShip();
-	CruiserShip(int life, int max_guns, float dodge_chances, float special_attack_chances, string type, string color, int x, int y, int angle, int r, Gun* gun) :
+	CruiserShip(int life, int max_guns, int dodge_chances, int special_attack_chances, string type, string color, int x, int y, int angle, int r, Gun* gun) :
 		SpaceShip(life, max_guns, dodge_chances, special_attack_chances, type, color, x, y, angle, r, gun) 
 	{
 		stamina = 200;

@@ -27,6 +27,7 @@ Fight::Fight(SpaceShip* redship, SpaceShip* blueship)
 	y_max = max(blue_coord.y, red_coord.y);
 	red_target_y = (y_max - y_min) / 2 + y_min - diff_between_ships / 2;
 	blue_target_y = (y_max - y_min) / 2 + y_min + diff_between_ships / 2;
+	on_place = false;
 }
 void Fight::who_is_starting()
 {
@@ -47,11 +48,16 @@ void Fight::switch_turn()
 
 void Fight::fighting(SpaceShip* defender, SpaceShip* attacker)
 {
-	defender->dodge();
 	attacker->attack(defender);
 	attacker->special_attack(defender);
-	if (attacker->stamina >= loop_count)
+	if((defender->is_dodge() == 1) or defender->is_avoiding == 1)
+		defender->dodge(target_x);
+	if (attacker->stamina <= loop_count)
+	{
 		switch_turn();
+		loop_count = 0;
+	}
+		
 }
 
 void Fight::choosing_fighters()
@@ -66,7 +72,18 @@ void Fight::choosing_fighters()
 void Fight::move_to_fighting_position()
 {
 	redship->move(target_x, red_target_y);
-	redship->update_position();
+	redship->rotate();
 	blueship->move(target_x, blue_target_y);
-	blueship->update_position();
+	blueship->rotate();
+}
+
+bool Fight::get_on_place()
+{
+	if (((blueship->coordinates.x == target_x) && (redship->coordinates.x == target_x) && (blueship->coordinates.y == blue_target_y) && (redship->coordinates.y == red_target_y)) or (on_place == 1))
+	{
+		on_place = true;
+		return true;
+	}
+	else
+		return false;
 }
