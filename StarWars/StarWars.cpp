@@ -4,7 +4,7 @@
 int main()
 {
     srand(time(NULL));
-    int shipscount = 1;
+    int shipscount = 7;
     int freq_of_movement = 0;
     sf::RenderWindow okno(sf::VideoMode(800, 240), "Star Wars", sf::Style::Fullscreen);
     sf::Vector2i window_dims(okno.getSize().x, okno.getSize().y);

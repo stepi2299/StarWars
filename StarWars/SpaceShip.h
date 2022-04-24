@@ -25,7 +25,7 @@ private:
 	ShipCoordinates coordinates;
 	bool fighting;
 	sf::Color sf_color;
-	int speed;
+	int speed, dodge_speed;
 	bool is_avoiding, increase;
 protected:
 	int stamina;
@@ -34,7 +34,6 @@ protected:
 public:
 	SpaceShip();
 	SpaceShip(int life, int max_guns, int dodge_chances, int special_attack_chances, string type, string color, int x, int y, int angle, int r, Gun *gun);
-	~SpaceShip() {}
 	vector <Gun*> armory;
 	void take_gun(Gun *g);
 	void drop_the_gun();
@@ -54,5 +53,11 @@ public:
 	void set_fighting(bool fight);
 	bool get_fighting();
 	float get_distance_between_ships(SpaceShip* ship);
+	void base();
+	~SpaceShip() 
+	{
+		for (auto i = armory.begin(); i < armory.end(); i++)
+			delete* i;
+	}
 };
 #endif

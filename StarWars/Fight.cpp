@@ -40,6 +40,8 @@ void Fight::who_is_starting()
 
 void Fight::switch_turn()
 {
+	blueship->is_avoiding = false;
+	redship->is_avoiding = false;
 	if (turn == "red")
 		turn = "blue";
 	else
@@ -48,15 +50,50 @@ void Fight::switch_turn()
 
 void Fight::fighting(SpaceShip* defender, SpaceShip* attacker)
 {
-	attacker->attack(defender);
-	attacker->special_attack(defender);
-	if((defender->is_dodge() == 1) or defender->is_avoiding == 1)
-		defender->dodge(target_x);
+	bool successful_attack;
 	if (attacker->stamina <= loop_count)
 	{
-		switch_turn();
-		loop_count = 0;
+		for (auto i = attacker->armory.begin(); i < attacker->armory.end(); i++)
+		{
+			if ((*i)->is_rotate() == 1)
+			{
+				(*i)->rotate();  // jesli atakuj¹cy wykonuje rotacjê to mo¿e ja skoñczyæ przed zaczêciem obrony
+				return;
+			}
+		}
+		if (defender->is_avoiding == 0)
+		{
+			switch_turn();
+			loop_count = 0;
+		}
+		else
+		{
+			defender->dodge(target_x);  // po wyczerpaniu wytrzyma³oœci atakuj¹cego jesli zacz¹c wykonywaæ unik to go skoñczy zanim zacznie atakowaæ
+			return;
+		}
 	}
+	for (auto i = attacker->armory.begin(); i < attacker->armory.end(); i++)
+	{
+		successful_attack = (*i)->attack(defender);
+		if (successful_attack == 1)
+		{
+			if ((defender->is_dodge() == 1) or defender->is_avoiding == 1)
+				defender->dodge(target_x);
+		}
+		if ((defender->is_avoiding == 0) and (*i)->is_rotate() == 0)
+		{
+			double calc_angle = calculate_angle(defender, *i);
+			if (calc_angle == 0)
+				(*i)->base();
+			else if ((int)calc_angle != (int)(*i)->get_diff_ang())
+				(*i)->set_rotation(calc_angle);
+		}
+		else if ((*i)->is_rotate() == 1)
+			(*i)->rotate();
+	}
+	if (defender->is_avoiding == 1)
+		defender->dodge(target_x);
+	attacker->special_attack(defender);
 		
 }
 
@@ -79,11 +116,63 @@ void Fight::move_to_fighting_position()
 
 bool Fight::get_on_place()
 {
-	if (((blueship->coordinates.x == target_x) && (redship->coordinates.x == target_x) && (blueship->coordinates.y == blue_target_y) && (redship->coordinates.y == red_target_y)) or (on_place == 1))
+	if (on_place == 1)
 	{
+		on_place = true;
+		return true;
+	}
+	if ((blueship->coordinates.x == target_x) && (redship->coordinates.x == target_x) && (blueship->coordinates.y == blue_target_y) && (redship->coordinates.y == red_target_y))
+	{
+		battle_position();
 		on_place = true;
 		return true;
 	}
 	else
 		return false;
+}
+
+double Fight::calculate_angle(SpaceShip* defender, Gun* attacker)
+{
+	Coordinates coord_gun = attacker->get_coordinates();
+	ShipCoordinates coord_ship = defender->get_coordinates();
+	int gun_x;
+	if (coord_gun.get_def_angl() == 0)
+		gun_x = coord_gun.x + attacker->get_ship_r() + coord_gun.w;
+	else
+		gun_x = coord_gun.x - attacker->get_ship_r() - coord_gun.w;
+	if (coord_ship.x - gun_x == 0)
+		return 0;
+	a = (coord_ship.y - coord_gun.y) / (coord_ship.x - gun_x);
+	double alpha =  90.0 - rad_into_degrees(atan(abs(a)));
+	if (((gun_x < coord_ship.x)&&(coord_gun.y > coord_ship.y)) || ((gun_x > coord_ship.x) && (coord_gun.y < coord_ship.y)))
+		return alpha;
+	else
+		return -alpha;
+}
+
+double Fight::rad_into_degrees(double rad)
+{
+	return (rad * 180.0) / PI;
+}
+
+void Fight::battle_position()
+{
+	for (auto i = redship->armory.begin(); i < redship->armory.end(); i++)
+		(*i)->set_battle_position(calculate_correct_angle(blueship, (*i)));
+	for (auto i = blueship->armory.begin(); i < blueship->armory.end(); i++)
+		(*i)->set_battle_position(calculate_correct_angle(redship, (*i)));
+}
+
+double Fight::calculate_correct_angle(SpaceShip* defender, Gun* attacker)
+{
+	ShipCoordinates ship_coord = defender->get_coordinates();
+	Coordinates gun_coord = attacker->get_coordinates();
+	int gun_x;
+	if (gun_coord.get_def_angl() == 0)
+		gun_x = gun_coord.x + attacker->get_ship_r() + gun_coord.w;
+	else
+		gun_x = gun_coord.x - attacker->get_ship_r() - gun_coord.w;
+	a = (ship_coord.y - gun_coord.y) / (ship_coord.x - gun_x);
+	return 90.0 - rad_into_degrees(atan(abs(a)));
+
 }

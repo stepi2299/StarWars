@@ -17,6 +17,7 @@ SpaceShip::SpaceShip(int life, int max_guns, int dodge_chances, int special_atta
 	else
 		cout << "Wrong color" << endl;
 	speed = 1;
+	dodge_speed = 3;
 	is_avoiding = false;
 }
 
@@ -45,14 +46,10 @@ void SpaceShip::drop_the_gun()
 	armory.pop_back();  // TODO so far last gun but in the future we can select which erase
 }
 
-void SpaceShip::attack(SpaceShip* ship)
-{
-	//TODO
-}
 
 bool SpaceShip::is_dodge()
 {
-	int dodge_rand = rand() % 1000;
+	int dodge_rand = rand() % 20;
 	if (dodge_chances >= dodge_rand)
 		return true;
 	else
@@ -141,6 +138,12 @@ float SpaceShip::get_distance_between_ships(SpaceShip* ship)
 
 void SpaceShip::move(int target_x, int target_y)
 {
+	ang = 0;
+	int move_speed = speed;
+	if ((is_avoiding == 1) && (coordinates.x - target_x < coordinates.r) && (increase == 1))
+		move_speed = dodge_speed;
+	else if ((is_avoiding == 1) && (coordinates.x - target_x > coordinates.r) && (increase == 0))
+		move_speed = dodge_speed;
 	if (coordinates.x == target_x)
 	{
 		moveX = 0;
@@ -161,6 +164,9 @@ void SpaceShip::move(int target_x, int target_y)
 		else
 			moveX = 0;
 	}
+
+	for (auto i = armory.begin(); i < armory.end(); i++)
+		(*i)->move(moveX, moveY, ang);
 }
 
 void SpaceShip::rotate()
@@ -217,6 +223,8 @@ void SpaceShip::rotate()
 			moveX = 0;
 		}
 	}
+	for (auto i = armory.begin(); i < armory.end(); i++)
+		(*i)->move(moveX, moveY, ang);
 }
 
 void SpaceShip::update_position()
@@ -226,7 +234,7 @@ void SpaceShip::update_position()
 	coordinates.angle += ang;
 
 	for (auto i = armory.begin(); i < armory.end(); i++)
-		(*i)->update_coord_gun(moveX, moveY, ang);
+		(*i)->update_coord_gun();
 
 	moveX = 0;
 	moveY = 0;
