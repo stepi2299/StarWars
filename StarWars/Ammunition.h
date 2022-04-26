@@ -12,18 +12,17 @@ class SpaceShip;
 class Ammunition
 {
 private:
-	int damage, fast, target_x, target_y, predicted_distance;
+	int damage, fast, predicted_distance, distance;
 	double moveX, moveY;
-	int distance = 0;
-	Coordinates coordinates;
+	AmmoCoordinates coordinates;
 	SpaceShip* target;
 	void subtrack_life();
-	friend class Gun;
-	bool missed = false;
 	int distance_calculate();
+	bool missed;
+	friend class Gun;
 public:
 	Ammunition();
-	Ammunition(int damage, int fast, int x, int y, int angle, int w, int h, int target_x, int target_y);
+	Ammunition(int damage, int fast, double x, double y, double angle, int w, int h, SpaceShip* target);
 	bool check_if_hit();
 	bool check_if_hit_after_dodge();
 	void update_position();

@@ -94,16 +94,21 @@ void Fight::fighting(SpaceShip* defender, SpaceShip* attacker)
 	if (defender->is_avoiding == 1)
 		defender->dodge(target_x);
 	attacker->special_attack(defender);
-		
 }
 
-void Fight::choosing_fighters()
+bool Fight::choosing_fighters()
 {
 	loop_count++;
 	if (turn == "red")
+	{
 		fighting(blueship, redship);
+		return if_fight_ends(blueship, redship);
+	}
 	else
+	{
 		fighting(redship, blueship);
+		return if_fight_ends(redship, blueship);
+	}
 }
 
 void Fight::move_to_fighting_position()
@@ -143,17 +148,13 @@ double Fight::calculate_angle(SpaceShip* defender, Gun* attacker)
 	if (coord_ship.x - gun_x == 0)
 		return 0;
 	a = (coord_ship.y - coord_gun.y) / (coord_ship.x - gun_x);
-	double alpha =  90.0 - rad_into_degrees(atan(abs(a)));
+	double alpha =  90.0 - Gun::rad_into_degrees(atan(abs(a)));
 	if (((gun_x < coord_ship.x)&&(coord_gun.y > coord_ship.y)) || ((gun_x > coord_ship.x) && (coord_gun.y < coord_ship.y)))
 		return alpha;
 	else
 		return -alpha;
 }
 
-double Fight::rad_into_degrees(double rad)
-{
-	return (rad * 180.0) / PI;
-}
 
 void Fight::battle_position()
 {
@@ -173,6 +174,44 @@ double Fight::calculate_correct_angle(SpaceShip* defender, Gun* attacker)
 	else
 		gun_x = gun_coord.x - attacker->get_ship_r() - gun_coord.w;
 	a = (ship_coord.y - gun_coord.y) / (ship_coord.x - gun_x);
-	return 90.0 - rad_into_degrees(atan(abs(a)));
+	return 90.0 - Gun::rad_into_degrees(atan(abs(a)));
+}
 
+void Fight::move_all_ammo()
+{
+	bool if_hit;
+	for (auto gun = redship->armory.begin(); gun < redship->armory.end(); gun++)
+		for (auto ammo = (*gun)->magazine.begin(); ammo < (*gun)->magazine.end(); ammo++)
+		{
+			if_hit = (*ammo)->check_if_hit();
+			if (if_hit == true)
+			{
+				delete (*ammo);
+				(*gun)->magazine.erase(ammo);
+			}
+			(*ammo)->update_position();
+		}
+	for (auto gun = blueship->armory.begin(); gun < blueship->armory.end(); gun++)
+		for (auto ammo = (*gun)->magazine.begin(); ammo < (*gun)->magazine.end(); ammo++)
+		{
+			if_hit = (*ammo)->check_if_hit();
+			if (if_hit == true)
+			{
+				delete (*ammo);
+				(*gun)->magazine.erase(ammo);
+			}
+			(*ammo)->update_position();
+		}
+}
+
+bool Fight::if_fight_ends(SpaceShip* defender, SpaceShip* attacker)
+{
+	if (defender->get_current_life() <= 0)
+	{
+		attacker->reset_after_fight();
+		delete defender;
+		return true;
+	}
+	else
+		return false;
 }

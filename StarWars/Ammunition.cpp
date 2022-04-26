@@ -4,12 +4,14 @@ Ammunition::Ammunition()
 	cout << "Ammo" << endl;
 }
 
-Ammunition::Ammunition(int damage, int fast, int x, int y, int angle, int w, int h, int target_x, int target_y) :
-	damage(damage), fast(fast), coordinates(x, y, angle, w, h), target_x(target_x), target_y(target_y)
+Ammunition::Ammunition(int damage, int fast, double x, double y, double angle, int w, int h, SpaceShip *target) :
+	damage(damage), fast(fast), coordinates(x, y, angle, w, h), target(target)
 {
-	int predicted_distance = (int)distance_calculate();
-	moveX = -sin(coordinates.angle) * fast;
-	moveY = -cos(coordinates.angle) * fast;
+	predicted_distance = (int)distance_calculate();
+	moveX = -sin(Gun::degrees_into_rad(coordinates.get_def_angl())) * fast;
+	moveY = cos(Gun::degrees_into_rad(coordinates.get_def_angl())) * fast;
+	missed = false;
+	distance = 0;
 }
 
 void Ammunition::subtrack_life()
@@ -19,35 +21,54 @@ void Ammunition::subtrack_life()
 
 bool Ammunition::check_if_hit()
 {
-	if ((target_x == coordinates.x) && (target_y == coordinates.y))  // change this condition
-	{
-		ShipCoordinates current_cord = target->get_coordinates();
-		if ((current_cord.x == target_x) && (current_cord.y == target_y))
-			return true;
-		else
-		{
-			missed = true;
-			return false;
-		}
-	}
-	else if (missed == 1)
+	double bullet_front_x = -sin(Gun::degrees_into_rad(coordinates.get_def_angl())) * coordinates.h + coordinates.x;
+	double bullet_front_y = cos(Gun::degrees_into_rad(coordinates.get_def_angl())) * coordinates.h + coordinates.y;
+	ShipCoordinates target_coords = target->get_coordinates();
+	if (missed == true)
 		return check_if_hit_after_dodge();
+	if ((bullet_front_x < target_coords.x + (double)target_coords.r) && (bullet_front_x > target_coords.x - (double)target_coords.r)
+		&& (bullet_front_y < target_coords.y + (double)target_coords.r) && (bullet_front_y > target_coords.y - (double)target_coords.r))
+	{
+		//subtrack_life();
+		return true;
+	}
+	else if (distance > predicted_distance + target_coords.r)
+	{
+		missed = true;
+		return false;
+	}
 	else
 		return false;
 }
 
 bool Ammunition::check_if_hit_after_dodge()
 {
-	return true;
+	if ((coordinates.x < 0) || (coordinates.x > 1900) || (coordinates.y < 0) || (coordinates.y > 1100))
+	{
+		return true;
+	}
+	else
+		return false;
 }
 
 void Ammunition::update_position()
 {
 	coordinates.x += moveX;
 	coordinates.y += moveY;
+	distance += fast;
 }
 
 int Ammunition::distance_calculate()
 {
-	return sqrt(pow(target_x - coordinates.x, 2) + pow(target_y - coordinates.y, 2));
+	return sqrt(pow(target->get_coordinates().x - coordinates.x, 2) + pow(target->get_coordinates().y - coordinates.y, 2));
+}
+
+sf::RectangleShape Ammunition::draw()
+{
+	sf::RectangleShape rect = sf::RectangleShape(sf::Vector2f(coordinates.w, coordinates.h));
+	//rect.setOrigin()
+	rect.setPosition(coordinates.x, coordinates.y);
+	rect.setFillColor(sf::Color::Yellow);
+	rect.setRotation(coordinates.get_def_angl());
+	return rect;
 }

@@ -11,6 +11,8 @@ using namespace std;
 class SpaceShip;
 class Ammunition;
 
+const double PI = 3.14159;
+
 class Gun
 {
 private:
@@ -19,7 +21,6 @@ private:
 	Coordinates coordinates;
 	sf::Color sf_color;
 	int loop_count;
-	vector <Ammunition*> magazine;
 	bool is_rotating;
 	double target_angle, ang, diff_angle;
 	const double angle_range = 90;
@@ -30,6 +31,7 @@ protected:
 public:
 	Gun();
 	Gun(string type, int period, int x, int y, int angle, int w, int h, string color, int r);
+	vector <Ammunition*> magazine;
 	bool attack(SpaceShip* ship);
 	void rotate();
 	void set_rotation(double ang);
@@ -42,6 +44,14 @@ public:
 	void move(int x, int y, double tmp_ang);
 	void base();
 	int get_ship_r();
+	static double rad_into_degrees(double rad)
+	{
+		return (rad * 180.0) / PI;
+	}
+	static double degrees_into_rad(double deg)
+	{
+		return (deg * PI) / 180.0;
+	}
 	~Gun() 
 	{
 		for (auto i = magazine.begin(); i < magazine.end(); i++)

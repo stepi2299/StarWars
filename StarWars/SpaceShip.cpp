@@ -98,7 +98,10 @@ int SpaceShip::get_current_life()
 void SpaceShip::subtract_life(int damage)
 {
 	if (life <= damage)
-		destroy();
+	{
+		life = 0;
+		//destroy();
+	}
 	else
 		life = life - damage;
 }
@@ -239,4 +242,10 @@ void SpaceShip::update_position()
 	moveX = 0;
 	moveY = 0;
 	ang = 0;
+}
+
+void SpaceShip::reset_after_fight()
+{
+	is_avoiding = false;
+	fighting = false;
 }

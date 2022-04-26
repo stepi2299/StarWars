@@ -9,7 +9,7 @@ public:
 		Gun(type, period, x, y, angle, w,  h, color, r)
 	{
 		min_damage = 30;
-		fast = 5;
+		fast = 2;
 		damage = (rand() % 10) + min_damage;
 	}
 };
@@ -20,7 +20,7 @@ public:
 		Gun(type, period, x, y, angle, w, h, color, r)
 	{
 		min_damage = 10;
-		fast = 1;
+		fast = 5;
 		damage = (rand() % 10) + min_damage;
 	}
 };
@@ -31,7 +31,7 @@ public:
 		Gun(type, period, x, y, angle, w, h, color, r)
 	{
 		min_damage = 20;
-		fast = 2;
+		fast = 4;
 		damage = (rand() % 10) + min_damage;
 	}
 };

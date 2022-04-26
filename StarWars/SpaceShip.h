@@ -53,6 +53,7 @@ public:
 	void set_fighting(bool fight);
 	bool get_fighting();
 	float get_distance_between_ships(SpaceShip* ship);
+	void reset_after_fight();
 	void base();
 	~SpaceShip() 
 	{

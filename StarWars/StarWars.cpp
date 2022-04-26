@@ -30,10 +30,14 @@ int main()
         {
             for (auto i = vfights.begin(); i < vfights.end(); i++)
             {
+                (*i)->move_all_ammo();
                 if ((*i)->get_on_place() == 0)
                     (*i)->move_to_fighting_position();
                 else
-                    (*i)->choosing_fighters();
+                {
+                    if ((*i)->choosing_fighters() == true)
+                        cout << "End of fight" << endl;
+                }
             }
             freq_of_movement = 0;
         }
@@ -47,7 +51,13 @@ int main()
             {
                 sf::RectangleShape rec = (*j)->draw();
                 okno.draw(rec);
+                for (auto ij = (*j)->magazine.begin(); ij < (*j)->magazine.end(); ij++)
+                {
+                    sf::RectangleShape rec = (*ij)->draw();
+                    okno.draw(rec);
+                }
             }
+
         }
         for (auto i = red_team.vships.begin(); i < red_team.vships.end(); i++)
         {
@@ -58,6 +68,11 @@ int main()
             {
                 sf::RectangleShape rec = (*j)->draw();
                 okno.draw(rec);
+                for (auto ij = (*j)->magazine.begin(); ij < (*j)->magazine.end(); ij++)
+                {
+                    sf::RectangleShape rec = (*ij)->draw();
+                    okno.draw(rec);
+                }
             }
         }
         okno.display();

@@ -29,8 +29,19 @@ bool Gun::attack(SpaceShip *ship)
 	if (loop_count == period)
 	{
 		ShipCoordinates target_coord = ship->get_coordinates();
-		//Ammunition* ammo = new Ammunition(damage, fast, coordinates.x + coordinates.w / 3, coordinates.y + coordinates.h, coordinates.angle, coordinates.w / 5, coordinates.h / 5, target_coord.x, target_coord.y);
-		//magazine.push_back(ammo);
+		double ammo_x, ammo_y, ammo_angle;
+		int ammo_w, ammo_h;
+		double h1 = sin(degrees_into_rad(coordinates.angle)) * (r + coordinates.w / 3);  // ró¿nica wysokoœci miêdzy œrodkiem staku, a pocz¹tkiem broni
+		double h2 = cos(degrees_into_rad(coordinates.angle)) * coordinates.h; // ró¿nica wysokoœci miêdzy pocz¹tkiem borni a koñcem broni
+		double w1 = cos(degrees_into_rad(coordinates.angle)) * (r + coordinates.w / 3);  // ró¿nica w szerokoœci miêdzy œrodkiem statku a koñcem broni
+		double w2 = - sin(degrees_into_rad(coordinates.angle)) * coordinates.h; // ró¿nica szerokoœci miêdzy pocz¹tkiem borni a koñcem broni
+		ammo_x = coordinates.x + w1 + w2;
+		ammo_y = coordinates.y + h1 + h2;
+		ammo_w = coordinates.w / 3;
+		ammo_h = coordinates.h / 3;
+		ammo_angle = coordinates.angle;
+		Ammunition* ammo = new Ammunition(damage, fast, ammo_x, ammo_y, ammo_angle, ammo_w, ammo_h, ship);
+		magazine.push_back(ammo);
 		loop_count = 0;
 		return true;
 	}
@@ -69,8 +80,12 @@ void Gun::move(int x, int y, double tmp_ang)
 
 void Gun::set_rotation(double ang)
 {
-	if (abs(ang) + abs(coordinates.angle) < angle_range + coordinates.get_def_angl())
+	double correction_angle=0;
+	if (abs(ang) < angle_range )
 	{
+		if (ang > 0)
+			correction_angle = 0.3 * ang;
+		ang = ang - correction_angle;
 		target_angle = coordinates.get_def_angl() + ang;
 		diff_angle = ang;
 		is_rotating = true;
