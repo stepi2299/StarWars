@@ -36,7 +36,10 @@ int main()
                 else
                 {
                     if ((*i)->choosing_fighters() == true)
-                        cout << "End of fight" << endl;
+                    {
+                        cout << "trt" << endl;
+                        vfights.erase(i);
+                    }
                 }
             }
             freq_of_movement = 0;
@@ -44,6 +47,12 @@ int main()
         okno.clear(sf::Color(0, 0, 0));
         for (auto i = blue_team.vships.begin(); i < blue_team.vships.end(); i++)
         {
+            if ((*i)->get_current_life() <= 0)
+            {
+                cout << "sdds" << endl;
+                blue_team.vships.erase(i);
+                delete (*i);
+            }
             (*i)->update_position();
             sf::CircleShape circle = (*i)->draw();
             okno.draw(circle);
@@ -61,6 +70,11 @@ int main()
         }
         for (auto i = red_team.vships.begin(); i < red_team.vships.end(); i++)
         {
+            if((*i)->get_current_life() <= 0)
+            {
+                red_team.vships.erase(i);
+                delete (*i);
+            }
             (*i)->update_position();
             sf::CircleShape circle = (*i)->draw();
             okno.draw(circle);

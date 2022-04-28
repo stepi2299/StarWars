@@ -14,6 +14,7 @@ protected:
 	int r, w, h, diff_between_ships, count, x, y, angle;
 public:
 	AbstractFactory(string color, int diff_between_ships, sf::Vector2i win_dims);
+	~AbstractFactory() {}
 	virtual Gun * create_gun() = 0;
 	virtual SpaceShip * create_ship() = 0;
 	void update_ships_count(int count);

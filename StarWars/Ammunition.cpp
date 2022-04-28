@@ -29,7 +29,7 @@ bool Ammunition::check_if_hit()
 	if ((bullet_front_x < target_coords.x + (double)target_coords.r) && (bullet_front_x > target_coords.x - (double)target_coords.r)
 		&& (bullet_front_y < target_coords.y + (double)target_coords.r) && (bullet_front_y > target_coords.y - (double)target_coords.r))
 	{
-		//subtrack_life();
+		subtrack_life();
 		return true;
 	}
 	else if (distance > predicted_distance + target_coords.r)

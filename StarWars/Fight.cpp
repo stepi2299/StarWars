@@ -48,7 +48,7 @@ void Fight::switch_turn()
 		turn = "red";
 }
 
-void Fight::fighting(SpaceShip* defender, SpaceShip* attacker)
+bool Fight::fighting(SpaceShip* defender, SpaceShip* attacker)
 {
 	bool successful_attack;
 	if (attacker->stamina <= loop_count)
@@ -58,7 +58,7 @@ void Fight::fighting(SpaceShip* defender, SpaceShip* attacker)
 			if ((*i)->is_rotate() == 1)
 			{
 				(*i)->rotate();  // jesli atakuj¹cy wykonuje rotacjê to mo¿e ja skoñczyæ przed zaczêciem obrony
-				return;
+				return false;
 			}
 		}
 		if (defender->is_avoiding == 0)
@@ -69,7 +69,7 @@ void Fight::fighting(SpaceShip* defender, SpaceShip* attacker)
 		else
 		{
 			defender->dodge(target_x);  // po wyczerpaniu wytrzyma³oœci atakuj¹cego jesli zacz¹c wykonywaæ unik to go skoñczy zanim zacznie atakowaæ
-			return;
+			return false;
 		}
 	}
 	for (auto i = attacker->armory.begin(); i < attacker->armory.end(); i++)
@@ -94,19 +94,21 @@ void Fight::fighting(SpaceShip* defender, SpaceShip* attacker)
 	if (defender->is_avoiding == 1)
 		defender->dodge(target_x);
 	attacker->special_attack(defender);
+	return true;
 }
 
 bool Fight::choosing_fighters()
 {
 	loop_count++;
+	bool test;
 	if (turn == "red")
 	{
-		fighting(blueship, redship);
+		test = fighting(blueship, redship);
 		return if_fight_ends(blueship, redship);
 	}
 	else
 	{
-		fighting(redship, blueship);
+		test = fighting(redship, blueship);
 		return if_fight_ends(redship, blueship);
 	}
 }
@@ -209,7 +211,6 @@ bool Fight::if_fight_ends(SpaceShip* defender, SpaceShip* attacker)
 	if (defender->get_current_life() <= 0)
 	{
 		attacker->reset_after_fight();
-		delete defender;
 		return true;
 	}
 	else
