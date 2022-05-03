@@ -4,7 +4,7 @@
 int main()
 {
     srand(time(NULL));
-    int shipscount = 7;
+    int shipscount = 1;
     int freq_of_movement = 0;
     sf::RenderWindow okno(sf::VideoMode(800, 240), "Star Wars", sf::Style::Fullscreen);
     sf::Vector2i window_dims(okno.getSize().x, okno.getSize().y);
@@ -55,7 +55,10 @@ int main()
             }
             (*i)->update_position();
             sf::CircleShape circle = (*i)->draw();
-            okno.draw(circle);
+            okno.draw(circle);  // drawing ships
+            Shield sh = (*i)->get_shield();
+            if (sh.get_active() == true)
+                okno.draw(sh.draw()); // drawing shield
             for (auto j = (*i)->armory.begin(); j < (*i)->armory.end(); j++)
             {
                 sf::RectangleShape rec = (*j)->draw();
@@ -77,7 +80,10 @@ int main()
             }
             (*i)->update_position();
             sf::CircleShape circle = (*i)->draw();
-            okno.draw(circle);
+            okno.draw(circle); // drawing ships
+            Shield sh = (*i)->get_shield();
+            if (sh.get_active() == true)
+                okno.draw(sh.draw()); // drawing shield
             for (auto j = (*i)->armory.begin(); j < (*i)->armory.end(); j++)
             {
                 sf::RectangleShape rec = (*j)->draw();

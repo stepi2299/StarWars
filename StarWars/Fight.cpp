@@ -68,18 +68,13 @@ bool Fight::fighting(SpaceShip* defender, SpaceShip* attacker)
 		}
 		else
 		{
-			defender->dodge(target_x);  // po wyczerpaniu wytrzyma³oœci atakuj¹cego jesli zacz¹c wykonywaæ unik to go skoñczy zanim zacznie atakowaæ
+			defender->defend(attacker, target_x, false);  // po wyczerpaniu wytrzyma³oœci atakuj¹cego jesli zacz¹c wykonywaæ unik to go skoñczy zanim zacznie atakowaæ
 			return false;
 		}
 	}
 	for (auto i = attacker->armory.begin(); i < attacker->armory.end(); i++)
 	{
 		successful_attack = (*i)->attack(defender);
-		if (successful_attack == 1)
-		{
-			if ((defender->is_dodge() == 1) or defender->is_avoiding == 1)
-				defender->dodge(target_x);
-		}
 		if ((defender->is_avoiding == 0) and (*i)->is_rotate() == 0)
 		{
 			double calc_angle = calculate_angle(defender, *i);
@@ -91,8 +86,7 @@ bool Fight::fighting(SpaceShip* defender, SpaceShip* attacker)
 		else if ((*i)->is_rotate() == 1)
 			(*i)->rotate();
 	}
-	if (defender->is_avoiding == 1)
-		defender->dodge(target_x);
+	defender->defend(attacker, target_x, successful_attack);
 	attacker->special_attack(defender);
 	return true;
 }

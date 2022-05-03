@@ -6,7 +6,7 @@ SpaceShip::SpaceShip()
 }
 
 SpaceShip::SpaceShip(int life, int max_guns, int dodge_chances, int special_attack_chances, string type, string color, int x, int y, int angle, int r, Gun *gun):
-	coordinates(x, y, angle, r), life(life), max_guns(max_guns), dodge_chances(dodge_chances), special_attack_chances(special_attack_chances), type(type), color(color)
+	coordinates(x, y, angle, r), life(life), max_guns(max_guns), defend_chances(dodge_chances), special_attack_chances(special_attack_chances), type(type), color(color)
 {
 	take_gun(gun);
 	fighting = false;
@@ -17,7 +17,6 @@ SpaceShip::SpaceShip(int life, int max_guns, int dodge_chances, int special_atta
 	else
 		cout << "Wrong color" << endl;
 	speed = 1;
-	dodge_speed = 3;
 	is_avoiding = false;
 }
 
@@ -47,43 +46,15 @@ void SpaceShip::drop_the_gun()
 }
 
 
-bool SpaceShip::is_dodge()
+bool SpaceShip::is_defending()
 {
 	int dodge_rand = rand() % 20;
-	if (dodge_chances >= dodge_rand)
+	if (defend_chances >= dodge_rand)
 		return true;
 	else
 		return false;
 }
 
-void SpaceShip::dodge(int target_x)
-{
-	if (is_avoiding == 0)
-	{
-		if (target_x == coordinates.x)
-			increase = true;
-		else
-			increase = false;
-	}
-	if (increase == 1)
-	{
-		if (coordinates.x == target_x + coordinates.r*2)
-			is_avoiding = false;
-		else
-		{
-			move(target_x + coordinates.r*2, coordinates.y);
-			is_avoiding = true;
-		}
-	}
-	else if (increase == 0)
-		if (coordinates.x == target_x)
-			is_avoiding = false;
-		else
-		{
-			move(target_x, coordinates.y);
-			is_avoiding = true;
-		}
-}
 
 ShipCoordinates SpaceShip::get_coordinates()
 {
@@ -139,21 +110,19 @@ float SpaceShip::get_distance_between_ships(SpaceShip* ship)
 	return sqrt(pow(target_coord.x - coordinates.x, 2) + pow(target_coord.y - coordinates.y, 2));
 }
 
-void SpaceShip::move(int target_x, int target_y)
+void SpaceShip::move(int target_x, int target_y, int current_speed)
 {
 	ang = 0;
-	int move_speed = speed;
-	if ((is_avoiding == 1) && (coordinates.x - target_x < coordinates.r) && (increase == 1))
-		move_speed = dodge_speed;
-	else if ((is_avoiding == 1) && (coordinates.x - target_x > coordinates.r) && (increase == 0))
-		move_speed = dodge_speed;
+	int move_speed = current_speed;
+	if (move_speed == 0)
+		move_speed = this->speed;
 	if (coordinates.x == target_x)
 	{
 		moveX = 0;
 		if (coordinates.y < target_y)
-			moveY = speed;
+			moveY = move_speed;
 		else if (coordinates.y > target_y)
-			moveY = -speed;
+			moveY = -move_speed;
 		else
 			moveY = 0;
 	}
@@ -161,9 +130,9 @@ void SpaceShip::move(int target_x, int target_y)
 	{
 		moveY = 0;
 		if (coordinates.x < target_x)
-			moveX = speed;
+			moveX = move_speed;
 		else if (coordinates.x > target_x)
-			moveX = -speed;
+			moveX = -move_speed;
 		else
 			moveX = 0;
 	}
@@ -248,4 +217,33 @@ void SpaceShip::reset_after_fight()
 {
 	is_avoiding = false;
 	fighting = false;
+}
+
+string SpaceShip::get_type()
+{
+	return type;
+}
+
+bool SpaceShip::is_shield_active()
+{
+	return false;
+}
+
+
+Shield SpaceShip::get_shield()
+{
+	return Shield();
+}
+
+double SpaceShip::calculate_ships_angle(SpaceShip* ship)
+{
+	ShipCoordinates attacker_coord = ship->get_coordinates();
+	if (coordinates.x - attacker_coord.x == 0)
+		return 0;
+	double a = (coordinates.y - attacker_coord.y) / (coordinates.x - attacker_coord.x);
+	double ang =  90.0 - Gun::rad_into_degrees(atan(abs(a)));
+	if (((coordinates.x < attacker_coord.x) && (coordinates.y > attacker_coord.y)) || ((coordinates.x > attacker_coord.x) && (coordinates.y < attacker_coord.y)))
+		return ang;
+	else
+		return -ang;
 }

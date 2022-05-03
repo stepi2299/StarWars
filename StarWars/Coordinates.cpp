@@ -26,7 +26,7 @@ ShipCoordinates::ShipCoordinates()
 {
 }
 ShipCoordinates::ShipCoordinates(int x, int y, int angle, int r) :
-	x(x), y(y), r(r), angle(angle), default_angle()
+	x(x), y(y), r(r), angle(angle), default_angle(angle)
 {
 }
 

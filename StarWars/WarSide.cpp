@@ -17,7 +17,7 @@ WarSide::WarSide(int shipscount, string color, sf::Vector2i win_dims) : shipscou
 			b_factory.update_ships_count(i);
 			ship = b_factory.create_ship();
 		}
-		else if (rand_num == 1)
+		else if (rand_num == 3)
 		{
 			c_factory.update_ships_count(i);
 			ship = c_factory.create_ship();
