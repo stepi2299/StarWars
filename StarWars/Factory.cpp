@@ -13,7 +13,7 @@ AbstractFactory::AbstractFactory(string color, int diff_between_ships, sf::Vecto
 	}
 	else if (color == "blue")
 	{
-		y = win_dims.y - temp_y;  // TODO change to check screen resolution
+		y = win_dims.y - temp_y;
 		angle = 180;
 	}
 	else
@@ -37,7 +37,7 @@ SpaceShip* BomberFactory::create_ship()
 	Gun* gun = create_gun();
 	int concrete_ship_x = x + diff_between_ships * count;
 	string type = "bomber";
-	SpaceShip* b_ship = new BomberShip(300, 2, 2, 3, type, color, concrete_ship_x, y, angle, r, gun);
+	SpaceShip* b_ship = new BomberShip(600, 2, 2, 3, type, color, concrete_ship_x, y, angle, r, gun);
 	return b_ship;
 }
 
@@ -53,7 +53,7 @@ SpaceShip* FighterFactory::create_ship()
 	Gun* gun = create_gun();
 	int concrete_ship_x = x + diff_between_ships * count;
 	string type = "fighter";
-	SpaceShip* f_ship = new FighterShip(200, 2, 5, 1, type, color, concrete_ship_x, y, angle, r, gun);
+	SpaceShip* f_ship = new FighterShip(400, 2, 5, 1, type, color, concrete_ship_x, y, angle, r, gun);
 	return f_ship;
 }
 
@@ -69,6 +69,6 @@ SpaceShip* CruiserFactory::create_ship()
 	Gun* gun = create_gun();
 	int concrete_ship_x = x + diff_between_ships * count;
 	string type = "cruiser";
-	SpaceShip* c_ship = new CruiserShip(250, 2, 1, 4, type, color, concrete_ship_x, y, angle, r, gun);
+	SpaceShip* c_ship = new CruiserShip(500, 2, 1, 4, type, color, concrete_ship_x, y, angle, r, gun);
 	return c_ship;
 }

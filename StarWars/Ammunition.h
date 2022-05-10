@@ -1,7 +1,6 @@
 #ifndef __Ammo__
 #define __Ammo__
 #include "SpaceShip.h"
-#include "Coordinates.h"
 #include <math.h>
 #include <SFML/Graphics.hpp>
 
@@ -11,7 +10,7 @@ class SpaceShip;
 
 class Ammunition
 {
-private:
+protected:
 	int damage, fast, predicted_distance, distance;
 	double moveX, moveY;
 	AmmoCoordinates coordinates;
@@ -20,6 +19,7 @@ private:
 	int distance_calculate();
 	bool missed;
 	friend class Gun;
+	friend class Laser;
 public:
 	Ammunition();
 	Ammunition(int damage, int fast, double x, double y, double angle, int w, int h, SpaceShip* target);

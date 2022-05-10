@@ -4,7 +4,7 @@
 int main()
 {
     srand(time(NULL));
-    int shipscount = 1;
+    int shipscount = 5;
     int freq_of_movement = 0;
     sf::RenderWindow okno(sf::VideoMode(800, 240), "Star Wars", sf::Style::Fullscreen);
     sf::Vector2i window_dims(okno.getSize().x, okno.getSize().y);
@@ -34,31 +34,64 @@ int main()
                 if ((*i)->get_on_place() == 0)
                     (*i)->move_to_fighting_position();
                 else
-                {
-                    if ((*i)->choosing_fighters() == true)
-                    {
-                        cout << "trt" << endl;
-                        vfights.erase(i);
-                    }
-                }
+                    (*i)->choosing_fighters();
             }
             freq_of_movement = 0;
         }
+        // tutaj odbywa sie ruch każdego statku co rundę, oraz sprawdzenie czy jakis statek powinien zostać usunięty
+        for (auto red = red_team.vships.begin(); red < red_team.vships.end(); red++)
+        {
+            (*red)->update_position();
+            if ((*red)->get_current_life() <= 0)
+            {
+                for (auto end_fight = vfights.begin(); end_fight < vfights.end(); end_fight++)
+                {
+                    if ((*end_fight)->get_ship("red") == (*red))
+                    {
+                        vfights.erase(end_fight);
+                        cout << "rruss" << endl;
+                        break;
+                    }
+                }
+                cout << "red" << endl;
+                delete (*red);
+                red_team.vships.erase(red);
+                cout << "bez red" << endl;
+            }
+        }
+        for (auto blue = blue_team.vships.begin(); blue < blue_team.vships.end(); blue++)
+        {
+            (*blue)->update_position();
+            if ((*blue)->get_current_life() <= 0)
+            {
+                for (auto end_fight = vfights.begin(); end_fight < vfights.end(); end_fight++)
+                {
+                    if ((*end_fight)->get_ship("blue") == (*blue))
+                    {
+                        vfights.erase(end_fight);
+                        cout << "bbuss" << endl;
+                        break;
+                    }
+                }
+                cout << "blue" << endl;
+                delete (*blue);
+                blue_team.vships.erase(blue);
+                cout << "bez blue" << endl;
+            }
+        }
         okno.clear(sf::Color(0, 0, 0));
+        // code responsible for displaying every part of ship war like ships, guns, ammo etc.
         for (auto i = blue_team.vships.begin(); i < blue_team.vships.end(); i++)
         {
-            if ((*i)->get_current_life() <= 0)
-            {
-                cout << "sdds" << endl;
-                blue_team.vships.erase(i);
-                delete (*i);
-            }
-            (*i)->update_position();
             sf::CircleShape circle = (*i)->draw();
             okno.draw(circle);  // drawing ships
-            Shield sh = (*i)->get_shield();
-            if (sh.get_active() == true)
-                okno.draw(sh.draw()); // drawing shield
+            for (auto b = (*i)->special_magazine.begin(); b < (*i)->special_magazine.end(); b++)
+                okno.draw((*b)->draw());  // drawing special attacks
+            if ((*i)->is_component_active() == true)
+            {
+                Component* comp = (*i)->get_component();
+                okno.draw(comp->draw());
+            }
             for (auto j = (*i)->armory.begin(); j < (*i)->armory.end(); j++)
             {
                 sf::RectangleShape rec = (*j)->draw();
@@ -78,12 +111,15 @@ int main()
                 red_team.vships.erase(i);
                 delete (*i);
             }
-            (*i)->update_position();
             sf::CircleShape circle = (*i)->draw();
             okno.draw(circle); // drawing ships
-            Shield sh = (*i)->get_shield();
-            if (sh.get_active() == true)
-                okno.draw(sh.draw()); // drawing shield
+            for (auto b = (*i)->special_magazine.begin(); b < (*i)->special_magazine.end(); b++)
+                okno.draw((*b)->draw()); // drawing special attacks
+            if ((*i)->is_component_active() == true)
+            {
+                Component* comp = (*i)->get_component();
+                okno.draw(comp->draw());
+            }
             for (auto j = (*i)->armory.begin(); j < (*i)->armory.end(); j++)
             {
                 sf::RectangleShape rec = (*j)->draw();

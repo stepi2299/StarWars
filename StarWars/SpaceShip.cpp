@@ -9,6 +9,7 @@ SpaceShip::SpaceShip(int life, int max_guns, int dodge_chances, int special_atta
 	coordinates(x, y, angle, r), life(life), max_guns(max_guns), defend_chances(dodge_chances), special_attack_chances(special_attack_chances), type(type), color(color)
 {
 	take_gun(gun);
+	active_round = 0;
 	fighting = false;
 	if (color == "red")
 		sf_color = sf::Color::Red;
@@ -48,8 +49,17 @@ void SpaceShip::drop_the_gun()
 
 bool SpaceShip::is_defending()
 {
-	int dodge_rand = rand() % 20;
+	int dodge_rand = rand() % 50;
 	if (defend_chances >= dodge_rand)
+		return true;
+	else
+		return false;
+}
+
+bool SpaceShip::is_special_attack()
+{
+	int attack_rand = rand() % 2000;
+	if (special_attack_chances >= attack_rand)
 		return true;
 	else
 		return false;
@@ -215,7 +225,7 @@ void SpaceShip::update_position()
 
 void SpaceShip::reset_after_fight()
 {
-	is_avoiding = false;
+	after_round();
 	fighting = false;
 }
 
@@ -224,16 +234,6 @@ string SpaceShip::get_type()
 	return type;
 }
 
-bool SpaceShip::is_shield_active()
-{
-	return false;
-}
-
-
-Shield SpaceShip::get_shield()
-{
-	return Shield();
-}
 
 double SpaceShip::calculate_ships_angle(SpaceShip* ship)
 {

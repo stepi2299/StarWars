@@ -48,3 +48,4 @@ double AmmoCoordinates::get_def_angl()
 	return angle;
 }
 
+

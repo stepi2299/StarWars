@@ -21,13 +21,14 @@ private:
 public:
 	bool on_place;
 	Fight(SpaceShip *redship, SpaceShip *blueship);
-	bool choosing_fighters();
+	void choosing_fighters();
 	void move_to_fighting_position();
 	bool get_on_place();
 	void battle_position();
 	double calculate_correct_angle(SpaceShip* defender, Gun* attacker);
 	void move_all_ammo();
-	bool if_fight_ends(SpaceShip* defender, SpaceShip* attacker);
+	void if_fight_ends(SpaceShip* defender, SpaceShip* attacker);
+	SpaceShip* get_ship(string);
 	~Fight() {}
 };
 #endif

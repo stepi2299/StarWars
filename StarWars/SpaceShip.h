@@ -1,5 +1,5 @@
-#ifndef __Ships__
-#define __Ships__
+#ifndef __SPACESHIP__
+#define __SPACESHIP__
 
 #include <vector>
 #include "Coordinates.h"
@@ -14,7 +14,8 @@
 using namespace std;
 
 class Gun;
-class Shield;
+class Component;
+class Ammunition;
 
 class SpaceShip
 {
@@ -22,13 +23,13 @@ private:
 	int life, max_guns, moveX = 0, moveY = 0, ang = 0;
 	int defend_chances, special_attack_chances;
 	string type, color;
-	bool check_special_attack();
 	bool fighting;
 	int speed;
 protected:
-	int stamina;
+	int stamina, active_round;
 	friend class Fight;
 	bool is_defending();
+	bool is_special_attack();
 	bool is_avoiding;
 	sf::Color sf_color;
 	ShipCoordinates coordinates;
@@ -37,8 +38,13 @@ public:
 	SpaceShip();
 	SpaceShip(int life, int max_guns, int dodge_chances, int special_attack_chances, string type, string color, int x, int y, int angle, int r, Gun *gun);
 	vector <Gun*> armory;
+	vector <Ammunition*> special_magazine;
 	virtual void defend(SpaceShip* ship, int target_x, bool successful_attack) = 0;
-	virtual void special_attack(SpaceShip* ship) = 0;
+	virtual void special_attack(SpaceShip*) = 0;
+	virtual void after_round() = 0;
+	virtual Coordinates get_component_coordinates() = 0;
+	virtual bool is_component_active() = 0;
+	virtual Component* get_component() = 0;
 	void take_gun(Gun *g);
 	void drop_the_gun();
 	bool can_take_gun(Gun *g);
@@ -57,9 +63,7 @@ public:
 	float get_distance_between_ships(SpaceShip* ship);
 	void reset_after_fight();
 	void base();
-	bool is_shield_active();
 	string get_type();
-	virtual Shield get_shield();
 	double calculate_ships_angle(SpaceShip* ship);
 	~SpaceShip() 
 	{

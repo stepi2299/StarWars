@@ -18,7 +18,7 @@ class Gun
 private:
 	string type, color;
 	int period, r, moveX, moveY;
-	Coordinates coordinates;
+	Coordinates coordinates;  // gun coordinates are the x,y - middle of the ship, angle - current angle, w,h width and height of the gun
 	sf::Color sf_color;
 	int loop_count;
 	bool is_rotating;

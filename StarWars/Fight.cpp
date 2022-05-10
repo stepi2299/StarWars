@@ -40,8 +40,8 @@ void Fight::who_is_starting()
 
 void Fight::switch_turn()
 {
-	blueship->is_avoiding = false;
-	redship->is_avoiding = false;
+	blueship->after_round();
+	redship->after_round();
 	if (turn == "red")
 		turn = "blue";
 	else
@@ -85,25 +85,25 @@ bool Fight::fighting(SpaceShip* defender, SpaceShip* attacker)
 		}
 		else if ((*i)->is_rotate() == 1)
 			(*i)->rotate();
+		defender->defend(attacker, target_x, successful_attack);
 	}
-	defender->defend(attacker, target_x, successful_attack);
 	attacker->special_attack(defender);
 	return true;
 }
 
-bool Fight::choosing_fighters()
+void Fight::choosing_fighters()
 {
 	loop_count++;
 	bool test;
 	if (turn == "red")
 	{
 		test = fighting(blueship, redship);
-		return if_fight_ends(blueship, redship);
+		if_fight_ends(blueship, redship);
 	}
 	else
 	{
 		test = fighting(redship, blueship);
-		return if_fight_ends(redship, blueship);
+		if_fight_ends(redship, blueship);
 	}
 }
 
@@ -176,6 +176,26 @@ double Fight::calculate_correct_angle(SpaceShip* defender, Gun* attacker)
 void Fight::move_all_ammo()
 {
 	bool if_hit;
+	for (auto bomb = redship->special_magazine.begin(); bomb < redship->special_magazine.end(); bomb++)
+	{
+		if_hit = (*bomb)->check_if_hit();
+		if (if_hit == true)
+		{
+			delete (*bomb);
+			redship->special_magazine.erase(bomb);
+		}
+		(*bomb)->update_position();
+	}
+	for (auto bomb = blueship->special_magazine.begin(); bomb < blueship->special_magazine.end(); bomb++)
+	{
+		if_hit = (*bomb)->check_if_hit();
+		if (if_hit == true)
+		{
+			delete (*bomb);
+			blueship->special_magazine.erase(bomb);
+		}
+		(*bomb)->update_position();
+	}
 	for (auto gun = redship->armory.begin(); gun < redship->armory.end(); gun++)
 		for (auto ammo = (*gun)->magazine.begin(); ammo < (*gun)->magazine.end(); ammo++)
 		{
@@ -200,13 +220,20 @@ void Fight::move_all_ammo()
 		}
 }
 
-bool Fight::if_fight_ends(SpaceShip* defender, SpaceShip* attacker)
+void Fight::if_fight_ends(SpaceShip* defender, SpaceShip* attacker)
 {
 	if (defender->get_current_life() <= 0)
 	{
 		attacker->reset_after_fight();
-		return true;
 	}
+}
+
+SpaceShip* Fight::get_ship(string side)
+{
+	if (side == "red")
+		return redship;
+	else if (side == "blue")
+		return blueship;
 	else
-		return false;
+		cout << "wrong side type, type = " << side << endl;
 }

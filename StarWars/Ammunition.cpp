@@ -26,10 +26,21 @@ bool Ammunition::check_if_hit()
 	ShipCoordinates target_coords = target->get_coordinates();
 	if (missed == true)
 		return check_if_hit_after_dodge();
-	if ((bullet_front_x < target_coords.x + (double)target_coords.r) && (bullet_front_x > target_coords.x - (double)target_coords.r)
-		&& (bullet_front_y < target_coords.y + (double)target_coords.r) && (bullet_front_y > target_coords.y - (double)target_coords.r))
+	else if (target->is_component_active() == true)
 	{
-		//subtrack_life();
+		//BomberShip* bomber_target = dynamic_cast<BomberShip*>(target);
+		if (target->get_type() == "bomber") 
+		{
+			Coordinates shield_coord = target->get_component_coordinates();
+			if (distance<predicted_distance - target_coords.r && distance>predicted_distance - (target_coords.r + shield_coord.h))
+				return true;
+		}
+	}
+
+	if ((bullet_front_x < target_coords.x + (double)target_coords.r) && (bullet_front_x > target_coords.x - (double)target_coords.r)
+		&& (bullet_front_y < target_coords.y + (double)target_coords.r) && (bullet_front_y > target_coords.y - (double)target_coords.r - 6))
+	{
+		subtrack_life();
 		return true;
 	}
 	else if (distance > predicted_distance + target_coords.r)

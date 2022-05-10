@@ -7,44 +7,55 @@ class SpaceShip;
 
 class Component
 {
-public:
-	virtual bool get_active();
-};
-
-class Shield
-{
 private:
-	int stamina, r;
-	Coordinates coord;
-	sf::Color color;
+	int stamina;
 	bool active;
+protected:
+	Coordinates coord;
+	int r;
+	sf::Color color;
 public:
-	Shield();
-	Shield(int stamina, sf::Color color, int x, int y, double angle, int w, int h, int r)
+	Component();
+	Component(int stamina, sf::Color color, int x, int y, double angle, int w, int h, int r)
 		:stamina(stamina), color(color), coord(x, y, angle, w, h), r(r)
 	{
 		active = false;
 	}
-	~Shield() {};
+	~Component() {};
 	int get_stamina();
 	bool get_active();
-	void set_active(bool activity);
+	void set_active(bool active);
+	Coordinates get_coordinates();
+	virtual sf::RectangleShape draw();
+
+};
+class Shield : public Component
+{
+public:
+	Shield();
+	Shield(int stamina, sf::Color color, int x, int y, double angle, int w, int h, int r)
+		:Component(stamina, color, x, y, angle, w, h, r)
+	{}
+	~Shield() {};
 	void update_coordinates(int x, int y, double ang);
 	sf::RectangleShape draw();
 
 };
 
-class Laser
+class Laser : public Component
 {
 private:
-	sf::Color color;
-	int stamina;
 	int damage;
 public:
 	Laser();
+	Laser(int stamina, int damage, sf::Color color, int x, int y, double angle, int w, int h, int r)
+		:Component(stamina, color, x, y, angle, w, h, r), damage(damage)
+	{}
 	~Laser() {};
-	void attack(SpaceShip* ship);
-	void destroy_all_created_ammo(SpaceShip* ship);
+	void attack(SpaceShip*);
+	void destroy_all_created_ammo(Gun*);
+	sf::RectangleShape draw();
+	void update_coordinates(int x, int y, double ang, int h);
 };
 #endif
 
