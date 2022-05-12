@@ -69,6 +69,10 @@ public:
 	{
 		for (auto i = armory.begin(); i < armory.end(); i++)
 			delete* i;
+		armory.clear();
+		for (auto i = special_magazine.begin(); i < special_magazine.end(); i++)
+			delete* i;
+		special_magazine.clear();
 	}
 };
 #endif

@@ -181,12 +181,12 @@ void SpaceShip::rotate()
 	}
 	else if (moveX > 0)
 	{
-		if (coordinates.angle > 270)
+		if (coordinates.angle > -90 && coordinates.get_def_angl() == 0)
 		{
 			ang = -speed;
 			moveX = 0;
 		}
-		else if (coordinates.angle < 270)
+		else if (coordinates.angle < 270 && coordinates.get_def_angl() == 180)
 		{
 			ang = speed;
 			moveX = 0;
@@ -194,12 +194,12 @@ void SpaceShip::rotate()
 	}
 	else if (moveX < 0)
 	{
-		if (coordinates.angle > 90)
+		if (coordinates.angle > 90 && coordinates.get_def_angl() == 180)
 		{
 			ang = -speed;
 			moveX = 0;
 		}
-		else if (coordinates.angle < 90)
+		else if (coordinates.angle < 90 && coordinates.get_def_angl() == 0)
 		{
 			ang = speed;
 			moveX = 0;
@@ -227,6 +227,17 @@ void SpaceShip::reset_after_fight()
 {
 	after_round();
 	fighting = false;
+	for (auto gun = armory.begin(); gun < armory.end(); gun++)
+	{
+		for (auto ammo = (*gun)->magazine.begin(); ammo < (*gun)->magazine.begin(); ammo++)
+			delete (*ammo);
+		(*gun)->magazine.clear();
+	}
+	for (auto bomb = special_magazine.begin(); bomb < special_magazine.end(); bomb++)
+		delete* bomb;
+	special_magazine.clear();
+	if(life>0)
+		base();
 }
 
 string SpaceShip::get_type()
@@ -246,4 +257,9 @@ double SpaceShip::calculate_ships_angle(SpaceShip* ship)
 		return ang;
 	else
 		return -ang;
+}
+
+void SpaceShip::base()
+{
+	coordinates.angle = coordinates.get_def_angl();
 }

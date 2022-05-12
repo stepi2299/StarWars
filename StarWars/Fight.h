@@ -17,7 +17,7 @@ private:
 	int target_x, red_target_y, blue_target_y;
 	double a, target_angle, angle_correction;
 	double calculate_angle(SpaceShip* defender, Gun* attacker);
-	bool fighting(SpaceShip* defender, SpaceShip* attacker);
+	void fighting(SpaceShip* defender, SpaceShip* attacker);
 public:
 	bool on_place;
 	Fight(SpaceShip *redship, SpaceShip *blueship);
@@ -27,8 +27,11 @@ public:
 	void battle_position();
 	double calculate_correct_angle(SpaceShip* defender, Gun* attacker);
 	void move_all_ammo();
-	void if_fight_ends(SpaceShip* defender, SpaceShip* attacker);
 	SpaceShip* get_ship(string);
-	~Fight() {}
+	void destroy_waste_after_fight();
+	~Fight() 
+	{
+		destroy_waste_after_fight();
+	}
 };
 #endif

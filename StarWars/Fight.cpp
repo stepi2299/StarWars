@@ -48,7 +48,7 @@ void Fight::switch_turn()
 		turn = "red";
 }
 
-bool Fight::fighting(SpaceShip* defender, SpaceShip* attacker)
+void Fight::fighting(SpaceShip* defender, SpaceShip* attacker)
 {
 	bool successful_attack;
 	if (attacker->stamina <= loop_count)
@@ -58,7 +58,7 @@ bool Fight::fighting(SpaceShip* defender, SpaceShip* attacker)
 			if ((*i)->is_rotate() == 1)
 			{
 				(*i)->rotate();  // jesli atakuj¹cy wykonuje rotacjê to mo¿e ja skoñczyæ przed zaczêciem obrony
-				return false;
+				return;
 			}
 		}
 		if (defender->is_avoiding == 0)
@@ -69,7 +69,7 @@ bool Fight::fighting(SpaceShip* defender, SpaceShip* attacker)
 		else
 		{
 			defender->defend(attacker, target_x, false);  // po wyczerpaniu wytrzyma³oœci atakuj¹cego jesli zacz¹c wykonywaæ unik to go skoñczy zanim zacznie atakowaæ
-			return false;
+			return;
 		}
 	}
 	for (auto i = attacker->armory.begin(); i < attacker->armory.end(); i++)
@@ -88,7 +88,7 @@ bool Fight::fighting(SpaceShip* defender, SpaceShip* attacker)
 		defender->defend(attacker, target_x, successful_attack);
 	}
 	attacker->special_attack(defender);
-	return true;
+	return;
 }
 
 void Fight::choosing_fighters()
@@ -97,13 +97,11 @@ void Fight::choosing_fighters()
 	bool test;
 	if (turn == "red")
 	{
-		test = fighting(blueship, redship);
-		if_fight_ends(blueship, redship);
+		fighting(blueship, redship);
 	}
 	else
 	{
-		test = fighting(redship, blueship);
-		if_fight_ends(redship, blueship);
+		fighting(redship, blueship);
 	}
 }
 
@@ -220,13 +218,6 @@ void Fight::move_all_ammo()
 		}
 }
 
-void Fight::if_fight_ends(SpaceShip* defender, SpaceShip* attacker)
-{
-	if (defender->get_current_life() <= 0)
-	{
-		attacker->reset_after_fight();
-	}
-}
 
 SpaceShip* Fight::get_ship(string side)
 {
@@ -236,4 +227,11 @@ SpaceShip* Fight::get_ship(string side)
 		return blueship;
 	else
 		cout << "wrong side type, type = " << side << endl;
+}
+
+
+void Fight::destroy_waste_after_fight()
+{
+	redship->reset_after_fight();
+	blueship->reset_after_fight();
 }

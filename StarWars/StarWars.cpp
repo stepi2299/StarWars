@@ -48,15 +48,13 @@ int main()
                 {
                     if ((*end_fight)->get_ship("red") == (*red))
                     {
+                        delete* end_fight;
                         vfights.erase(end_fight);
-                        cout << "rruss" << endl;
                         break;
                     }
                 }
-                cout << "red" << endl;
                 delete (*red);
                 red_team.vships.erase(red);
-                cout << "bez red" << endl;
             }
         }
         for (auto blue = blue_team.vships.begin(); blue < blue_team.vships.end(); blue++)
@@ -68,15 +66,13 @@ int main()
                 {
                     if ((*end_fight)->get_ship("blue") == (*blue))
                     {
+                        delete* end_fight;
                         vfights.erase(end_fight);
-                        cout << "bbuss" << endl;
                         break;
                     }
                 }
-                cout << "blue" << endl;
                 delete (*blue);
                 blue_team.vships.erase(blue);
-                cout << "bez blue" << endl;
             }
         }
         okno.clear(sf::Color(0, 0, 0));
