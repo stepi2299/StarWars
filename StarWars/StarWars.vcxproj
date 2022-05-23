@@ -149,7 +149,6 @@
     <ClCompile Include="Coordinates.cpp" />
     <ClCompile Include="Factory.cpp" />
     <ClCompile Include="Fight.cpp" />
-    <ClCompile Include="GameTurn.cpp" />
     <ClCompile Include="Gun.cpp" />
     <ClCompile Include="guns.cpp" />
     <ClCompile Include="ships.cpp" />
@@ -163,7 +162,6 @@
     <ClInclude Include="Coordinates.h" />
     <ClInclude Include="Factory.h" />
     <ClInclude Include="Fight.h" />
-    <ClInclude Include="GameTurn.h" />
     <ClInclude Include="Gun.h" />
     <ClInclude Include="guns.h" />
     <ClInclude Include="ships.h" />

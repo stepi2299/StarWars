@@ -5,8 +5,8 @@ SpaceShip::SpaceShip()
 	cout << "SpaceShip" << endl;
 }
 
-SpaceShip::SpaceShip(int life, int max_guns, int dodge_chances, int special_attack_chances, string type, string color, int x, int y, int angle, int r, Gun *gun):
-	coordinates(x, y, angle, r), life(life), max_guns(max_guns), defend_chances(dodge_chances), special_attack_chances(special_attack_chances), type(type), color(color)
+SpaceShip::SpaceShip(int life, int max_guns, int dodge_chances, int special_attack_chances, string color, int x, int y, int angle, int r, Gun *gun):
+	coordinates(x, y, angle, r), life(life), max_guns(max_guns), defend_chances(dodge_chances), special_attack_chances(special_attack_chances), color(color)
 {
 	take_gun(gun);
 	active_round = 0;
@@ -35,7 +35,7 @@ void SpaceShip::take_gun(Gun *g)
 bool SpaceShip::can_take_gun(Gun *gun)
 {
 	int current_armory_state = armory.size();
-	if ((current_armory_state < max_guns) && type==gun->get_type())
+	if (current_armory_state < max_guns)
 		return true;
 	else
 		return false;
@@ -81,16 +81,11 @@ void SpaceShip::subtract_life(int damage)
 	if (life <= damage)
 	{
 		life = 0;
-		//destroy();
 	}
 	else
 		life = life - damage;
 }
 
-void SpaceShip::destroy()
-{
-	// TODO 
-}
 
 sf::CircleShape SpaceShip::draw()
 {
@@ -240,10 +235,6 @@ void SpaceShip::reset_after_fight()
 		base();
 }
 
-string SpaceShip::get_type()
-{
-	return type;
-}
 
 
 double SpaceShip::calculate_ships_angle(SpaceShip* ship)

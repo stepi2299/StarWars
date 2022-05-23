@@ -4,8 +4,8 @@ Gun::Gun()
 	cout << "Gun" << endl;
 }
 
-Gun::Gun(string type, int period, int x, int y, int angle, int w, int h, string color, int r):
-	type(type), period(period), coordinates(x, y, angle, w, h), color(color), r(r)
+Gun::Gun(int period, int x, int y, int angle, int w, int h, string color, int r):
+	period(period), coordinates(x, y, angle, w, h), color(color), r(r)
 {
 	if (color == "red")
 		sf_color = sf::Color::Red;
@@ -14,10 +14,6 @@ Gun::Gun(string type, int period, int x, int y, int angle, int w, int h, string 
 	loop_count = 0;
 }
 
-string Gun::get_type()
-{
-	return this->type;
-}
 
 Coordinates Gun::get_coordinates()
 {

@@ -6,6 +6,10 @@
 
 using namespace std;
 
+
+/// <summary>
+/// class provide interface for factory which returns Gun and SpaceShip of one type: Design Pattern - Abstract Factory 
+/// </summary>
 class AbstractFactory
 {
 protected:
@@ -20,6 +24,9 @@ public:
 	void update_ships_count(int count);
 };
 
+/// <summary>
+/// concrete factory class of Bombers
+/// </summary>
 class BomberFactory:public AbstractFactory
 {
 public:
@@ -33,6 +40,9 @@ public:
 	SpaceShip* create_ship() override;
 };
 
+/// <summary>
+/// concrete factory class of Fighters
+/// </summary>
 class FighterFactory:public AbstractFactory
 {
 public:
@@ -46,6 +56,9 @@ public:
 	SpaceShip* create_ship() override;
 };
 
+/// <summary>
+/// concrete factory class of Cruisers
+/// </summary>
 class CruiserFactory:public AbstractFactory
 {
 public:
